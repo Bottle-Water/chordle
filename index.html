@@ -15,7 +15,10 @@
     <div class="title">
         <h1>Chordle</h1>
         <h2>A daily chord guessing game</h2>
+
     </div>
+    <button class="playChord" onclick="playChord(0);">Hear the target chord</button>
+
     <div class="guesses" id="game">
         <div class="grid">
 
@@ -34,13 +37,24 @@
         <div data-note="Ab4" class="key black" ></div>
         <div data-note="A4" class="key white" ></div>
         <div data-note="Bb4" class="key black" ></div>
-        <div data-note="B4" class="key white" ></div>
+        <div data-note="B4" class="key white" ></div>        
+        <div data-note="C5" class="key white"></div>
+        <div data-note="Db5" class="key black" ></div>
+        <div data-note="D5" class="key white" ></div>
+        <div data-note="Eb5" class="key black" ></div>
+        <div data-note="E5" class="key white" ></div>
+        <div data-note="F5" class="key white" ></div>
+        <div data-note="Gb5" class="key black" ></div>
+        <div data-note="G5" class="key white" ></div>
+        <div data-note="Ab5" class="key black" ></div>
+        <div data-note="A5" class="key white" ></div>
+        <div data-note="Bb5" class="key black" ></div>
+        <div data-note="B5" class="key white" ></div>
     </div>
 
     <div class="submit">
         <button onclick="submitGuess();">Submit</button>
         <h3 class="hint">You need to pick 4 keys for the chord!</h3>
-        <button onclick="playChord();">Hint (Plays the target chord)</button>
     </div>
 </body>
 </html>

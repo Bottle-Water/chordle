@@ -1,19 +1,39 @@
 const inputPiano = new Tone.Synth().toDestination();
-const chordPiano = new Tone.PolySynth(Tone.Synth).toDestination();
+const chordPiano = new Tone.PolySynth(Tone.Synth, {
+	"volume": 0,
+	"detune": 0,
+	"portamento": 0,
+	"envelope": {
+		"attack": 0.005,
+		"attackCurve": "linear",
+		"decay": 0.1,
+		"decayCurve": "exponential",
+		"release": 1,
+		"releaseCurve": "exponential",
+		"sustain": 0.3
+	},
+	"oscillator": {
+		"partialCount": 0,
+		"partials": [],
+		"phase": 0,
+		"type": "triangle"
+	}
+}).toDestination();
 const keys = document.querySelectorAll('.key');
 const game = document.getElementById('game');
 let selectedKeys = []
 let activeCount = 0
-let tempAnswer = ["Db", "E", "Ab", "A"];
-let tempAnswerPlayer = ["Db4", "E4", "Ab4", "A4"];
+let tempAnswerPlayer = ["Db4", "F4", "Ab4", "Eb5"];
 const maxCount = 4
 
 drawGrid(game);
 
+
+
 const state = {
     grid: Array(6)
         .fill()
-        .map(() => Array(maxCount).fill('')),
+        .map(() => Array(maxCount + 1).fill('')),
     currentRow: 0,
     currentCol: 0,
 };
@@ -25,14 +45,27 @@ keys.forEach(key => {
     key.addEventListener('click', () => playNote(key))
 })
 
-function playChord()
+function playChord(row)
 {
-    chordPiano.triggerAttackRelease(tempAnswerPlayer, "8n");
+    if (row == 0)
+    {
+        chordPiano.triggerAttackRelease(tempAnswerPlayer, "8n");
+    }
+    else
+    {
+        row--;
+        const now = Tone.now();
+        for (let i = 0; i < maxCount; i++) {
+            timeSkew = i * (1/maxCount) // s;
+            console.log(`playing ${state.grid[row][i]}`)
+            chordPiano.triggerAttack(state.grid[row][i], now + timeSkew);
+        }
+        chordPiano.triggerRelease(state.grid[row], now + 2);
+    }
 }
 
 function playNote(key) {
     // Toggle active
-    console.log(activeCount);
     if (key.classList.contains('active'))
     {
         key.classList.remove('active');
@@ -73,14 +106,7 @@ function submitGuess()
         
         setTimeout(function() {
             key.classList.add('play');
-            console.log(`${state.currentRow} is state row and i is ${i}`)
-
-            // Strip the octave
-            note = key.dataset.note;
-            note = note.substring(0, note.length-1)
-
-            state.grid[state.currentRow][state.currentCol] = note;
-            console.log(state.grid);
+            state.grid[state.currentRow][state.currentCol] = key.dataset.note;
             state.currentCol++;
             updateGrid();
             checkRow(state.currentRow);
@@ -119,7 +145,14 @@ function drawBox(container, row, col, note ='')
     const box = document.createElement('div');
     box.className = 'box';
     box.id = `box${row}${col}`;
+
+    if (col == maxCount){
+        // Add the play
+        box.addEventListener('click', () => playChord(row+1))
+        box.style.border = "0px solid";
+    }
     box.textContent = note;
+
 
     container.appendChild(box);
     return box;
@@ -131,7 +164,7 @@ function drawGrid(container) {
 
     for (let i = 0; i < 6; i++)
     {
-        for (let j = 0; j < maxCount; j++)
+        for (let j = 0; j < maxCount + 1; j++)
         {
             drawBox(grid, i, j);
         }
@@ -146,8 +179,7 @@ function updateGrid() {
         {
             
             const box = document.getElementById(`box${i}${j}`);
-            console.log(`On box${i}${j}`)
-            box.textContent = state.grid[i][j];
+            box.textContent = state.grid[i][j].substring(0, state.grid[i][j].length - 1);
         }
     }
 }
@@ -156,19 +188,22 @@ function checkRow(row) {
     for (let i = 0; i < maxCount; i++)
     {
         const box = document.getElementById(`box${row}${i}`);
-        if (box.textContent == tempAnswer[i])
+        if (state.grid[row][i] == tempAnswerPlayer[i])
         {
             box.classList.add("right");
         }
-        else if (tempAnswer.includes(box.textContent)) 
+        else if (tempAnswerPlayer.includes(state.grid[row][i])) 
         {
-            // WARNING: IF MORE OCTAVES ARE ADDED THIS WILL NOT WORK!!!!!!! YOU HAVE TO COUNT!!!!
+            // WARNING: IF MORE OCTAVES ARE ADDED THIS may NOT WORK!!!!!!! YOU HAVE TO COUNT!!!!
             box.classList.add("wrong")
         }
+        else 
+        {
+            box.classList.add("empty");
+        }
     }
-}
+    // Add the play
+    const box = document.getElementById(`box${row}${maxCount}`);
+    box.textContent = "▶️";
 
-state.grid = Array(6)
-    .fill()
-    .map(() => Array(maxCount).fill(""));
-updateGrid();
+}
