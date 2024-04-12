@@ -1,0 +1,51 @@
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+.title {
+    display: flex;
+    flex-direction: column;
+    justify-self: center;
+    justify-content: center;
+    color: white;
+    font-family: sans-serif;
+}
+
+.title *
+{
+    align-self: center;
+}
+
+body {
+    background-color: grey;
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.piano {
+    display: flex;
+}
+
+.key {
+    height: calc(var(--width) * 4);
+    width: var(--width);
+}
+
+.white {
+    --width: 80px;
+    background-color: white;
+    border: 1px solid #333;
+}
+
+.black {
+    z-index: 2;
+    --width: 45px;
+    margin-left: calc(var(--width)/-2);
+    margin-right: calc(var(--width)/-2);
+    background-color: black;
+    border: 1px solid #333;
+}
