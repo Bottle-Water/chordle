@@ -7,8 +7,6 @@
     flex-direction: column;
     justify-self: center;
     justify-content: center;
-    color: white;
-    font-family: sans-serif;
 }
 
 .title *
@@ -24,7 +22,25 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    color: white;
+    font-family: sans-serif;
 }
+
+.guess {
+    display: flex;
+    flex-direction: column;
+}
+
+.hint {
+    opacity: 0;
+}
+
+.hint.shown {
+    opacity: 100;
+}
+
+
+
 
 .piano {
     display: flex;

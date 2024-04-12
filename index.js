@@ -34,8 +34,17 @@ function playNote(key) {
 
 function submitGuess()
 {
-    const now = Tone.now();
+
+    // Todo: Make sure that you have picked the maxCount of keys
     const keys = document.querySelectorAll('.active');
+    if (keys.length < maxCount)
+    {
+        inputPiano.triggerAttackRelease("C1", "32n");
+        document.querySelector('.hint').classList.add('shown');
+        return;
+    }
+
+    const now = Tone.now();
     let notes = []
     let i = 0;
 
@@ -61,7 +70,8 @@ function submitGuess()
         })
     }, 2 * 1000);
 
-    
+    activeCount = 0;
+    document.querySelector('.hint').classList.remove('shown');
 
 }
 
