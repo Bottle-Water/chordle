@@ -4,6 +4,8 @@ const keys = document.querySelectorAll('.key');
 const game = document.getElementById('game');
 let selectedKeys = []
 let activeCount = 0
+let tempAnswer = ["Db", "E", "Ab", "A"];
+let tempAnswerPlayer = ["Db4", "E4", "Ab4", "A4"];
 const maxCount = 4
 
 drawGrid(game);
@@ -22,6 +24,11 @@ const state = {
 keys.forEach(key => {
     key.addEventListener('click', () => playNote(key))
 })
+
+function playChord()
+{
+    chordPiano.triggerAttackRelease(tempAnswerPlayer, "8n");
+}
 
 function playNote(key) {
     // Toggle active
@@ -67,7 +74,7 @@ function submitGuess()
         setTimeout(function() {
             key.classList.add('play');
             console.log(`${state.currentRow} is state row and i is ${i}`)
-            
+
             // Strip the octave
             note = key.dataset.note;
             note = note.substring(0, note.length-1)
@@ -76,6 +83,7 @@ function submitGuess()
             console.log(state.grid);
             state.currentCol++;
             updateGrid();
+            checkRow(state.currentRow);
             
           }, timeSkewMs);
         
@@ -140,6 +148,22 @@ function updateGrid() {
             const box = document.getElementById(`box${i}${j}`);
             console.log(`On box${i}${j}`)
             box.textContent = state.grid[i][j];
+        }
+    }
+}
+
+function checkRow(row) {
+    for (let i = 0; i < maxCount; i++)
+    {
+        const box = document.getElementById(`box${row}${i}`);
+        if (box.textContent == tempAnswer[i])
+        {
+            box.classList.add("right");
+        }
+        else if (tempAnswer.includes(box.textContent)) 
+        {
+            // WARNING: IF MORE OCTAVES ARE ADDED THIS WILL NOT WORK!!!!!!! YOU HAVE TO COUNT!!!!
+            box.classList.add("wrong")
         }
     }
 }

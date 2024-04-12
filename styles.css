@@ -89,6 +89,7 @@ body {
 }
 .hint {
     opacity: 0;
+    margin: 0;
 }
 
 .hint.shown {
