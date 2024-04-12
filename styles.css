@@ -41,6 +41,11 @@ body {
     border: 1px solid #333;
 }
 
+.white.active {
+    background-color: #CCC;
+}
+
+
 .black {
     z-index: 2;
     --width: 45px;
@@ -48,4 +53,9 @@ body {
     margin-right: calc(var(--width)/-2);
     background-color: black;
     border: 1px solid #333;
+}
+
+
+.black.active {
+    background-color: #333;
 }
