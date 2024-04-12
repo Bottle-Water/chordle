@@ -47,8 +47,6 @@ body {
 }
 
 
-
-
 .key {
     height: calc(var(--width) * 4);
     width: var(--width);
@@ -85,4 +83,18 @@ body {
 }
 .black.play {
     background-color: orange;
+}
+
+/* mobile formatting */
+@media screen and (max-width: 500px){
+    .black {
+        --width: 20px;
+        margin-left: calc(var(--width)/-2);
+        margin-right: calc(var(--width)/-2);
+    }
+
+
+    .white {
+        --width: 30px;
+    }
 }
