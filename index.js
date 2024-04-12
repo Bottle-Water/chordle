@@ -1,5 +1,5 @@
 const inputPiano = new Tone.Synth().toDestination();
-
+const chordPiano = new Tone.PolySynth(Tone.Synth).toDestination();
 const keys = document.querySelectorAll('.key');
 
 let selectedKeys = []
@@ -31,3 +31,42 @@ function playNote(key) {
     }
 
 }
+
+function submitGuess()
+{
+    const now = Tone.now();
+    const keys = document.querySelectorAll('.active');
+    let notes = []
+    let i = 0;
+
+    keys.forEach(key=> {
+        timeSkew = i * (1/maxCount) // s;
+        timeSkewMs = timeSkew * 1000 // ms;
+        
+        setTimeout(function() {
+            key.classList.add('play');
+          }, timeSkewMs);
+        
+        chordPiano.triggerAttack(key.dataset.note, now + timeSkew);
+        notes.push(key.dataset.note);
+        i++;
+    })
+
+    chordPiano.triggerRelease(notes, now + 2);
+
+    setTimeout(function() {
+        keys.forEach(key => {
+            key.classList.remove('active');
+            key.classList.remove('play');
+        })
+    }, 2 * 1000);
+
+    
+
+}
+
+
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+  

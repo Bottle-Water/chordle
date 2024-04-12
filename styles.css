@@ -30,6 +30,9 @@ body {
     display: flex;
 }
 
+
+
+
 .key {
     height: calc(var(--width) * 4);
     width: var(--width);
@@ -45,6 +48,11 @@ body {
     background-color: #CCC;
 }
 
+.white.play {
+    background-color: orange;
+}
+
+
 
 .black {
     z-index: 2;
@@ -58,4 +66,7 @@ body {
 
 .black.active {
     background-color: #333;
+}
+.black.play {
+    background-color: orange;
 }
