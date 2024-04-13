@@ -195,14 +195,14 @@ body {
 /* mobile formatting */
 @media screen and (max-width: 600px){
     .black {
-        --width: 12px;
+        --width: 15px;
         margin-left: calc(var(--width)/-2);
         margin-right: calc(var(--width)/-2);
     }
 
 
     .white {
-        --width: 20px;
+        --width: 25px;
     }
 
 
