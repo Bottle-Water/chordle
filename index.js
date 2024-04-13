@@ -63,7 +63,7 @@ const keys = document.querySelectorAll('.key');
 const game = document.getElementById('game');
 let selectedKeys = []
 let activeCount = 0
-let tempAnswerPlayer = ["Db4", "F4", "Ab4", "Eb5"];
+let tempAnswerPlayer = ["Eb3", "Bb3", "C4", "G4"];
 const maxCount = 4
 
 drawGrid(game);
