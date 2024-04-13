@@ -62,7 +62,10 @@ const inputPiano = chordPiano;
 const keys = document.querySelectorAll('.key');
 const game = document.getElementById('game');
 let selectedKeys = []
-let activeCount = 0
+let activeCount = 0;
+let rightCount = 0;
+let str = "";
+let copyStr = "";
 let tempAnswerPlayer = ["Eb3", "Bb3", "C4", "G4"];
 const maxCount = 4
 
@@ -76,6 +79,10 @@ const state = {
         .map(() => Array(maxCount + 1).fill('')),
     currentRow: 0,
     currentCol: 0,
+    ScoreGrid: Array(6)
+    .fill()
+    .map(() => Array(maxCount+1).fill('')),
+    gameOver: false,
 };
 
 
@@ -97,7 +104,6 @@ function playChord(row)
         const now = Tone.now();
         for (let i = 0; i < maxCount; i++) {
             timeSkew = i * (1/maxCount) // s;
-            console.log(`playing ${state.grid[row][i]}`)
             chordPiano.triggerAttack(state.grid[row][i], now + timeSkew);
         }
         chordPiano.triggerRelease(state.grid[row], now + 2);
@@ -133,6 +139,11 @@ function submitGuess()
     {
         inputPiano.triggerAttackRelease("C1", "32n");
         document.querySelector('.hint').classList.add('shown');
+        return;
+    }
+
+    if (state.gameOver)
+    {
         return;
     }
 
@@ -225,12 +236,14 @@ function updateGrid() {
 }
 
 function checkRow(row) {
+    rightCount = 0;
     for (let i = 0; i < maxCount; i++)
     {
         const box = document.getElementById(`box${row}${i}`);
         if (state.grid[row][i] == tempAnswerPlayer[i])
         {
             box.classList.add("right");
+            rightCount++;
         }
         else if (tempAnswerPlayer.includes(state.grid[row][i])) 
         {
@@ -245,5 +258,103 @@ function checkRow(row) {
     // Add the play
     const box = document.getElementById(`box${row}${maxCount}`);
     box.textContent = "▶️";
+
+    // Pop up end screen at end
+    if (rightCount == 4 || row == 5)
+    {
+        state.gameOver = true;
+        setTimeout(function() {
+            overlayOn();
+        }, 2000);
+    }
+
+}
+
+// Post game sharing
+function overlayOn()
+{
+
+
+    copyStr = "";
+    state.ScoreGrid = Array(6)
+        .fill()
+        .map(() => Array(maxCount+1).fill(''));
+
+    for (let i = 0; i < state.grid.length; i++)
+    {
+        for (let j = 0; j < maxCount; j++)
+        {
+            
+            const box = document.getElementById(`box${i}${j}`);
+            if (box.classList.contains('right'))
+            {
+                copyStr += "🟩";
+                str += "🟩";
+            }
+            else if (box.classList.contains('wrong'))
+            {
+                copyStr += "🟨";
+                str += "🟨";
+            }
+            else
+            {
+                copyStr += "⬛️";
+                str += "⬛️";
+            }
+        }
+        copyStr += "\r\n";
+        str += "<br />";
+    }
+    copyStr = copyStr.substring(0, 10*state.currentRow); // trust me the emojis are 2 each
+    str = str.substring(0, 14*state.currentRow); // trust me the emojis are 2 each
+
+    if (state.currentRow == 6 && rightCount != 4)
+    {
+        str = "So close :( 6/6<br />" + str;
+    }
+    else
+    {
+        str = `You got it! ${state.currentRow}/6<br \>` + str;
+    }
+
+
+    document.getElementById("overlay").style.display = "flex";
+    document.getElementById("emojis").children[0].innerHTML = str;
+
+}
+
+function overlayOff()
+{
+    document.getElementById("overlay").style.display = "none";
+}
+
+function copyScore()
+{
+
+    var today = new Date();
+    var dd = String(today.getDate()).padStart(2, '0');
+    var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+    var yy = String(today.getFullYear()).substring(2, );
+
+    today = mm + '/' + dd + '/' + yy;
+    CopyText = `Chordle ${today} 🎹 ${state.currentRow}/6\r\n` + copyStr;
+
+        // Copy the text inside the text field
+    navigator.clipboard.writeText(CopyText);
+    
+    Toastify({
+        text: "Score Copied!",
+        offset: {
+            y: 200
+          },
+        duration: 3000,
+        gravity: "top", // `top` or `bottom`
+        position: "center", // `left`, `center` or `right`
+        stopOnFocus: true, // Prevents dismissing of toast on hover
+        style: {
+          background: "#00b09b",
+        },
+        onClick: function(){} // Callback after click
+      }).showToast();
 
 }
