@@ -186,22 +186,25 @@ body {
 
 
 .black.active {
-    background-color: #333;
+    background-color: #CCC;
 }
 .black.play {
     background-color: orange;
 }
 
 /* mobile formatting */
-@media screen and (max-width: 500px){
+@media screen and (max-width: 600px){
     .black {
-        --width: 20px;
+        --width: 12px;
         margin-left: calc(var(--width)/-2);
         margin-right: calc(var(--width)/-2);
     }
 
 
     .white {
-        --width: 30px;
+        --width: 20px;
     }
+
+
 }
+
