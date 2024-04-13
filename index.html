@@ -22,13 +22,13 @@
 
     </div>
     <button class="playChord" onclick="playChord(0);">Hear the target chord</button>
-    <button class="shareScore" onclick="overlayOn()">Share!</button>
+    <button id="overlayButton" onclick="overlayOn()">Share!</button>
     <div id="overlay">
         <div id="container">
             <div id="close" onclick="overlayOff()">X</div>
             <div id="emojis"><p></p></div>
             <button class="share" onclick="copyScore()">Share Score</button>
-            
+
         </div>
     </div>
 

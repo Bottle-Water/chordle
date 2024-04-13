@@ -265,6 +265,7 @@ function checkRow(row) {
         state.gameOver = true;
         setTimeout(function() {
             overlayOn();
+            shareOn()
         }, 2000);
     }
 
@@ -326,6 +327,11 @@ function overlayOn()
 function overlayOff()
 {
     document.getElementById("overlay").style.display = "none";
+}
+
+function shareOn()
+{
+    document.getElementById("overlayButton").style.display = "block";
 }
 
 function copyScore()

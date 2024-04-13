@@ -53,8 +53,9 @@
 
 }
 
-.share {
+#overlayButton {
     margin-bottom: 20px;
+    display: none;
 }
 
 .title {
