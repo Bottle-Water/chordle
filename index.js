@@ -275,7 +275,7 @@ function checkRow(row) {
 function overlayOn()
 {
 
-
+    str = "";
     copyStr = "";
     state.ScoreGrid = Array(6)
         .fill()
