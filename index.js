@@ -66,7 +66,7 @@ let activeCount = 0;
 let rightCount = 0;
 let str = "";
 let copyStr = "";
-let tempAnswerPlayer = ["D3","F3", "A3", "D4"];
+let tempAnswerPlayer = ["D3","Bb3", "D4", "G4"];
 const maxCount = 4
 
 drawGrid(game);
