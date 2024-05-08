@@ -135,7 +135,7 @@ function random_item(item) {
     var yy = String(today.getFullYear()).substring(2, );
 
     today = mm + dd + yy;
-    const arng = new alea(today);
+    const arng = new alea(today + 42);
     const randItem = item[Math.ceil( arng.quick() * item.length)]; 
     return randItem;
     
