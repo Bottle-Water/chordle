@@ -59,6 +59,46 @@ const chordPiano = new Tone.Sampler({
 
 const inputPiano = chordPiano;
 
+
+const enharmonics = [
+    ["B2", "Cb3"],
+    ["B#2", "C3"],
+    ["C#3", "Db3"],
+    ["D3"],
+    ["D#3", "Eb3"],
+    ["E3", "Fb3"],
+    ["E#3", "F3"],
+    ["F#3", "Gb3"],
+    ["G3"],
+    ["G#3", "Ab3"],
+    ["A3"],
+    ["A#3", "Bb3"],
+    ["B3", "Cb4"],
+    ["B#3", "C4"],
+    ["C#4", "Db4"],
+    ["D4"],
+    ["D#4", "Eb4"],
+    ["E4", "Fb4"],
+    ["E#4", "F4"],
+    ["F#4", "Gb4"],
+    ["G4"],
+    ["G#4", "Ab4"],
+    ["A4"],
+    ["A#4", "Bb4"],
+    ["B4", "Cb5"],
+    ["B#4", "C5"]
+  ];
+
+
+function findEnharmonicNotes(note, enharmonicArray) {
+    for (let enharmonicGroup of enharmonicArray) {
+      if (enharmonicGroup.includes(note)) {
+        return enharmonicGroup;
+      }
+    }
+    return null; // Return null if the note is not found
+}
+  
 const keys = document.querySelectorAll('.key');
 const game = document.getElementById('game');
 let selectedKeys = []
@@ -66,12 +106,40 @@ let activeCount = 0;
 let rightCount = 0;
 let str = "";
 let copyStr = "";
-let tempAnswerPlayer = ["D3","Bb3", "D4", "G4"];
+let tempAnswerPlayer = ["D3","Gb3", "A3", "D4"];
+
+const voicing = [];
+
+for (chord of Tonal.ChordType.all())
+{
+    if (chord.intervals.length == 4)
+    {
+        voicing.push(chord.aliases[0])
+    }
+}
+// console.log(voicing)
+const root = ["C3", "Db3", "D3", "Eb3", "E3", "F3", "Gb3", "G3", "Ab3", "A3", "Bb3", "B3"];
 const maxCount = 4
 
 drawGrid(game);
+// console.log(random_item(voicing));
+// console.log(random_item(root));
+tempAnswerPlayer = Tonal.Chord.notes(random_item(voicing), random_item(root));
+// console.log(tempAnswerPlayer);
+todaysChord = (Tonal.Chord.detect(tempAnswerPlayer.map(string => string.slice(0, -1)))[0]);
 
+function random_item(item) {
+    var today = new Date();
+    var dd = String(today.getDate()).padStart(2, '0');
+    var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+    var yy = String(today.getFullYear()).substring(2, );
 
+    today = mm + dd + yy;
+    const arng = new alea(today);
+    const randItem = item[Math.ceil( arng.quick() * item.length)]; 
+    return randItem;
+    
+}
 
 const state = {
     grid: Array(6)
@@ -91,6 +159,11 @@ const state = {
 keys.forEach(key => {
     key.addEventListener('click', () => playNote(key))
 })
+
+function chordGen()
+{
+
+}
 
 function playChord(row)
 {
@@ -131,6 +204,8 @@ function playNote(key) {
 
 }
 
+
+
 function submitGuess()
 {
     state.currentCol = 0;
@@ -154,18 +229,38 @@ function submitGuess()
     keys.forEach(key=> {
         timeSkew = i * (1/maxCount) // s;
         timeSkewMs = timeSkew * 1000 // ms;
+
+        // change it so that if there is a note in the correct chord it will always display that version over the other.
+
+        let keynote = key.dataset.note;
+        enNotes = findEnharmonicNotes(keynote, enharmonics)
+        if (enNotes)
+        {
+            // console.log(enNotes);
+            for (note in tempAnswerPlayer)
+            {
+                // console.log(enNotes);
+                // console.log(tempAnswerPlayer[note]);
+                if(enNotes.includes(tempAnswerPlayer[note]))
+                {
+                    // console.log("Note from ANSWER! "+tempAnswerPlayer[note]);
+                    keynote = tempAnswerPlayer[note];
+                }
+            }
+        }
         
         setTimeout(function() {
             key.classList.add('play');
-            state.grid[state.currentRow][state.currentCol] = key.dataset.note;
+            state.grid[state.currentRow][state.currentCol] = keynote;
             state.currentCol++;
             updateGrid();
             checkRow(state.currentRow);
             
           }, timeSkewMs);
         
-        chordPiano.triggerAttack(key.dataset.note, now + timeSkew);
-        notes.push(key.dataset.note);
+        chordPiano.triggerAttack(keynote, now + timeSkew);
+
+        notes.push(keynote);
         i++;
     })
 
@@ -257,7 +352,7 @@ function checkRow(row) {
     }
     // Add the play
     const box = document.getElementById(`box${row}${maxCount}`);
-    box.textContent = "▶️";
+    box.textContent = `▶️`;
 
     // Pop up end screen at end
     if (rightCount == 4 || row == 5)
@@ -317,7 +412,7 @@ function overlayOn()
     {
         str = `You got it! ${state.currentRow}/6<br \>` + str;
     }
-
+    str = `Chord: ${todaysChord}<br \>` + str;
 
     document.getElementById("overlay").style.display = "flex";
     document.getElementById("emojis").children[0].innerHTML = str;

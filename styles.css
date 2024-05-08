@@ -293,17 +293,33 @@ body {
     background-color: orange;
 }
 
+
 /* mobile formatting */
-@media screen and (max-width: 600px){
+@media screen and (max-width: 1100px){
     .black {
-        --width: 15px;
+        --width: 20px;
         margin-left: calc(var(--width)/-2);
         margin-right: calc(var(--width)/-2);
     }
 
 
     .white {
-        --width: 25px;
+        --width: 30px;
+    }
+
+
+}
+/* mobile formatting */
+@media screen and (max-width: 500px){
+    .black {
+        --width: 12px;
+        margin-left: calc(var(--width)/-2);
+        margin-right: calc(var(--width)/-2);
+    }
+
+
+    .white {
+        --width: 20px;
     }
 
 
