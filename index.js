@@ -61,7 +61,6 @@ const inputPiano = chordPiano;
 
 
 const enharmonics = [
-    ["B2", "Cb3"],
     ["B#2", "C3"],
     ["C#3", "Db3"],
     ["D3"],
@@ -86,9 +85,34 @@ const enharmonics = [
     ["A4"],
     ["A#4", "Bb4"],
     ["B4", "Cb5"],
-    ["B#4", "C5"]
   ];
 
+const notes = [
+    "B#2", "C3",
+    "C#3", "Db3",
+    "D3",
+    "D#3", "Eb3",
+    "E3", "Fb3",
+    "E#3", "F3",
+    "F#3", "Gb3",
+    "G3",
+    "G#3", "Ab3",
+    "A3",
+    "A#3", "Bb3",
+    "B3", "Cb4",
+    "B#3", "C4",
+    "C#4", "Db4",
+    "D4",
+    "D#4", "Eb4",
+    "E4", "Fb4",
+    "E#4", "F4",
+    "F#4", "Gb4",
+    "G4",
+    "G#4", "Ab4",
+    "A4",
+    "A#4", "Bb4",
+    "B4", "Cb5"
+  ];
 
 function findEnharmonicNotes(note, enharmonicArray) {
     for (let enharmonicGroup of enharmonicArray) {
@@ -99,6 +123,23 @@ function findEnharmonicNotes(note, enharmonicArray) {
     return null; // Return null if the note is not found
 }
   
+
+var today = new Date();
+var dd = String(today.getDate()).padStart(2, '0');
+var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+var yy = String(today.getFullYear()).substring(2, );
+
+today = mm + dd + yy;
+const arng = new alea(today);
+
+
+function random_item(item) {
+
+    const randItem = item[Math.ceil( arng.quick() * item.length)]; 
+    return randItem;
+    
+}
+
 const keys = document.querySelectorAll('.key');
 const game = document.getElementById('game');
 let selectedKeys = []
@@ -109,37 +150,53 @@ let copyStr = "";
 let tempAnswerPlayer = ["D3","Gb3", "A3", "D4"];
 
 const voicing = [];
-
+i = 0
 for (chord of Tonal.ChordType.all())
 {
+    
     if (chord.intervals.length == 4)
     {
         voicing.push(chord.aliases[0])
+    }
+    if (chord.intervals.length == 3)
+    {
+        intervals = chord.intervals
+        // console.log(intervals)
+        intervals.unshift("-5P");
+        // console.log(intervals)
+        Tonal.ChordType.add(intervals, chord.aliases, chord.aliases[0]);
+        voicing.push(chord.aliases[0]);
     }
 }
 // console.log(voicing)
 const root = ["C3", "Db3", "D3", "Eb3", "E3", "F3", "Gb3", "G3", "Ab3", "A3", "Bb3", "B3"];
 const maxCount = 4
-
+let offset = 0;
 drawGrid(game);
-// console.log(random_item(voicing));
-// console.log(random_item(root));
+
+
+function isSubset(arr1, arr2) {
+    return arr1.every(value => arr2.includes(value));
+}
+
 tempAnswerPlayer = Tonal.Chord.notes(random_item(voicing), random_item(root));
+tempAnswerPlayer = Tonal.Chord.notes(random_item(voicing), random_item(root));
+
 // console.log(tempAnswerPlayer);
+// console.log(isSubset(tempAnswerPlayer, notes))
+if (!isSubset(tempAnswerPlayer, notes))
+{
+    while(!isSubset(tempAnswerPlayer, notes))
+    {
+        tempAnswerPlayer = Tonal.Chord.notes(random_item(voicing), random_item(root));
+        // console.log(tempAnswerPlayer);
+    }
+}
+
+// console.log("FINAL CHORD: " + tempAnswerPlayer);
+
 todaysChord = (Tonal.Chord.detect(tempAnswerPlayer.map(string => string.slice(0, -1)))[0]);
 
-function random_item(item) {
-    var today = new Date();
-    var dd = String(today.getDate()).padStart(2, '0');
-    var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
-    var yy = String(today.getFullYear()).substring(2, );
-
-    today = mm + dd + yy;
-    const arng = new alea(today + 42);
-    const randItem = item[Math.ceil( arng.quick() * item.length)]; 
-    return randItem;
-    
-}
 
 const state = {
     grid: Array(6)
@@ -160,10 +217,6 @@ keys.forEach(key => {
     key.addEventListener('click', () => playNote(key))
 })
 
-function chordGen()
-{
-
-}
 
 function playChord(row)
 {
