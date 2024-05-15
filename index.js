@@ -156,16 +156,16 @@ for (chord of Tonal.ChordType.all())
     
     if (chord.intervals.length == 4)
     {
-        //voicing.push(chord.aliases[0])
+        voicing.push(chord.aliases[0])
     }
     if (chord.intervals.length == 3)
     {
-        intervals = chord.intervals
+        //intervals = chord.intervals
         // console.log(intervals)
-        intervals.unshift("-5P");
+        //intervals.unshift("-5P");
         // console.log(intervals)
-        Tonal.ChordType.add(intervals, chord.aliases, chord.aliases[0]);
-        voicing.push(chord.aliases[0]);
+        //Tonal.ChordType.add(intervals, chord.aliases, chord.aliases[0]);
+        //voicing.push(chord.aliases[0]);
     }
 }
 // console.log(voicing)
