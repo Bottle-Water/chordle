@@ -130,7 +130,7 @@ var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
 var yy = String(today.getFullYear()).substring(2, );
 
 today = mm + dd + yy;
-const arng = new alea(today);
+const arng = new alea(today + 4);
 
 
 function random_item(item) {
