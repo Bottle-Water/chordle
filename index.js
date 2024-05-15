@@ -156,7 +156,7 @@ for (chord of Tonal.ChordType.all())
     
     if (chord.intervals.length == 4)
     {
-        voicing.push(chord.aliases[0])
+        //voicing.push(chord.aliases[0])
     }
     if (chord.intervals.length == 3)
     {
