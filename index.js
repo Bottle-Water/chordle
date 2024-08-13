@@ -134,10 +134,8 @@ const arng = new alea(today + 4);
 
 
 function random_item(item) {
-
-    const randItem = item[Math.ceil( arng.quick() * item.length)]; 
+    const randItem = item[Math.ceil( arng.quick() * (item.length - 1))]; 
     return randItem;
-    
 }
 
 const keys = document.querySelectorAll('.key');
@@ -182,18 +180,18 @@ function isSubset(arr1, arr2) {
 tempAnswerPlayer = Tonal.Chord.notes(random_item(voicing), random_item(root));
 tempAnswerPlayer = Tonal.Chord.notes(random_item(voicing), random_item(root));
 
-// console.log(tempAnswerPlayer);
-// console.log(isSubset(tempAnswerPlayer, notes))
+//console.log(tempAnswerPlayer);
+//console.log(isSubset(tempAnswerPlayer, notes))
 if (!isSubset(tempAnswerPlayer, notes))
 {
     while(!isSubset(tempAnswerPlayer, notes))
     {
         tempAnswerPlayer = Tonal.Chord.notes(random_item(voicing), random_item(root));
-        // console.log(tempAnswerPlayer);
+        //console.log(tempAnswerPlayer);
     }
 }
 
-// console.log("FINAL CHORD: " + tempAnswerPlayer);
+//console.log("FINAL CHORD: " + tempAnswerPlayer);
 
 todaysChord = (Tonal.Chord.detect(tempAnswerPlayer.map(string => string.slice(0, -1)))[0]);
 
