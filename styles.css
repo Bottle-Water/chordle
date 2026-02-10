@@ -73,11 +73,53 @@ button:active {
     display: flex;
     flex-direction: column;
     height: auto;
-    width: 200px;
-    border-radius: 10%;
-    background-color: whitesmoke;
-
+    width: 230px;
+    border-radius: 25px;
+    box-shadow: 4px 4px 0px rgba(0, 0, 0, 1.0);
+    border: 3px solid black;
+    background-color: grey;
+    font-size: 0.5rem;
+    padding: 10px;
+    text-shadow: 3px 2px 0px #000000;
 }
+
+#container p{
+    color:#ffffff;
+    padding-top: 25%;
+    font-weight: bold;
+    font-size: 1.8rem;
+    text-align: center;
+    margin: 10px 0;
+}
+
+#close {
+    color: #fff;
+}
+
+#container .share {
+    background: #fbca1f;
+    font-family: inherit;
+    padding: 0.6em 1.3em;
+    font-weight: 900;
+    font-size: 18px;
+    border: 3px solid black;
+    border-radius: 0.4em;
+    box-shadow: 0.1em 0.1em;
+    cursor: pointer;
+    margin: 10px 0;
+}
+
+#container .share:hover {
+    transform: translate(-0.05em, -0.05em);
+    box-shadow: 0.15em 0.15em;
+}
+
+#container .share:active {
+    transform: translate(0.05em, 0.05em);
+    box-shadow: 0.05em 0.05em;
+}
+
+
 
 #overlayButton {
     margin-bottom: 20px;
@@ -86,12 +128,20 @@ button:active {
 
 .title {
     display: flex;
+    font: 1.8rem inherit;
     flex-direction: column;
+    color: #ffffff;
+    text-shadow: 2px 3px 0px #000000;
     justify-self: center;
     justify-content: center;
-    text-shadow: 2px 2px 3px #121213;
     padding-bottom: 0px;
 
+}
+
+.title h1 {
+    font-size: 3.0rem;
+    margin-bottom: 0px;
+    margin-top: 0px;
 }
 
 .title *
@@ -100,6 +150,12 @@ button:active {
     margin-top: 0px;
     margin-bottom: 0px;
     align-self: center;
+}
+
+.title h2 {
+    padding-top: 0px;
+    margin-top: 0px;
+    font-size: 1.5rem;
 }
 
 body {
@@ -124,6 +180,7 @@ body {
 
 .playChord {
     font-size: 1.0rem;
+    margin-bottom: 1%;
 }
 
 
@@ -142,16 +199,33 @@ body {
     grid-template-columns: repeat(5, auto);
 }
 
+
+/* Left side rounded for C3 */
+.piano .key.white[data-note="C3"] {
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+}
+
+/* Right side rounded for B4 */
+.piano .key.white[data-note="B4"] {
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+}
+
 .box {
     width: 40px;
     height: 40px;
     border: 2px solid var(--empty);
-    border-radius: 10%;
+    border-radius: 20%;
     margin: 4px;
     color: white;
     display: grid;
     place-items: center;
     font-size: 1.6rem;
+}
+
+.grid .box:nth-child(5n) {
+    box-shadow: none;
 }
 
 .box.empty {
@@ -183,6 +257,9 @@ body {
 
 .piano {
     display: flex;
+    box-shadow: 2px 4px 0px rgba(0, 0, 0, 0.5);
+    border-radius: 20px;
+    margin: 10px;
 }
 
 
@@ -192,7 +269,7 @@ body {
 }
 
 .white {
-    --width: 75px;
+    --width: 65px;
     background-color: white;
     border: 1px solid #333;
 }
@@ -202,14 +279,31 @@ body {
 }
 
 .white.play {
-    background-color: rgb(160, 230, 251);
+    background-color: rgb(138, 156, 206);
+    box-shadow: inset 0px -1px 10px rgba(67, 68, 104, 0.5);
+
+}
+
+.white.right {
+    background-color: var(--right);
+    box-shadow: inset 0px -1px 10px rgba(67, 68, 104, 0.5);
+}
+
+.white.wrong {
+    background-color: var(--wrong);
+    box-shadow: inset 0px -1px 10px rgba(67, 68, 104, 0.5);
+}
+
+.white.empty {
+    background-color: var(--empty);
+    box-shadow: inset 0px -1px 10px rgba(67, 68, 104, 0.5);
 }
 
 
 
 .black {
     z-index: 2;
-    --width: 40px;
+    --width: 35px;
     margin-left: calc(var(--width)/-2);
     margin-right: calc(var(--width)/-2);
     background-color: black;
@@ -218,10 +312,26 @@ body {
 
 
 .black.active {
-    background-color: #888;
+    background-color: #5e5d5d;
 }
 .black.play {
-    background-color: orange;
+    background-color: rgb(81, 77, 118);
+    box-shadow: inset 0px -1px 10px rgba(31, 31, 64, 0.5);
+}
+
+.black.right {
+    background-color: var(--right);
+    box-shadow: inset 0px -1px 10px rgba(31, 31, 64, 0.5);
+}
+
+.black.wrong {
+    background-color: var(--wrong);
+    box-shadow: inset 0px -1px 10px rgba(31, 31, 64, 0.5);
+}
+
+.black.empty {
+    background-color: var(--empty);
+    box-shadow: inset 0px -1px 10px rgba(31, 31, 64, 0.5);
 }
 
 

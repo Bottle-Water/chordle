@@ -172,6 +172,34 @@ const maxCount = 4
 let offset = 0;
 drawGrid(game);
 
+// Local storage: load state
+function loadState() {
+    const saved = localStorage.getItem('chordleState');
+    if (saved) {
+        const parsed = JSON.parse(saved);
+        Object.assign(state, parsed);
+        updateGrid();
+        // Restore the visual state (colors) for each completed row
+        for (let i = 0; i < state.currentRow; i++) {
+            checkRow(i);
+        }
+    }
+}
+
+// Debug function to reset local storage
+function resetGame() {
+    localStorage.removeItem('chordleState');
+    location.reload();
+}
+
+// Local storage: save state
+function saveState() {
+    localStorage.setItem('chordleState', JSON.stringify(state));
+}
+
+// Load state on page load
+window.addEventListener('DOMContentLoaded', loadState);
+
 
 function isSubset(arr1, arr2) {
     return arr1.every(value => arr2.includes(value));
@@ -226,8 +254,27 @@ function playChord(row)
     {
         row--;
         const now = Tone.now();
+        
+        // Highlight notes sequentially as they play
         for (let i = 0; i < maxCount; i++) {
-            timeSkew = i * (1/maxCount) // s;
+            const note = state.grid[row][i];
+            const key = document.querySelector(`.key[data-note='${note}']`);
+            
+            timeSkew = i * (1/maxCount); // s
+            timeSkewMs = timeSkew * 1000; // ms
+            
+            // Add highlight when note plays
+            setTimeout(() => {
+                if (key) key.classList.add('play');
+            }, timeSkewMs);
+            
+            setTimeout(function() {
+                keys.forEach(key => {
+                    key.classList.remove('active');
+                    key.classList.remove('play');
+                    
+                })
+            }, 2 * 1000);
             chordPiano.triggerAttack(state.grid[row][i], now + timeSkew);
         }
         chordPiano.triggerRelease(state.grid[row], now + 2);
@@ -324,6 +371,7 @@ function submitGuess()
             
         })
         state.currentRow++;
+            saveState(); // Save after guess
     }, 2 * 1000);
 
     activeCount = 0;
@@ -457,13 +505,13 @@ function overlayOn()
 
     if (state.currentRow == 6 && rightCount != 4)
     {
-        str = "So close :( 6/6<br />" + str;
+        str = "So close :(<br /> <br />6/6<br /><br />" + str;
     }
     else
     {
-        str = `You got it! ${state.currentRow}/6<br \>` + str;
+        str = `You got it! <br />${state.currentRow}/6<br /><br />` + str;
     }
-    str = `Chord: ${todaysChord}<br \>` + str;
+    str = `Chord: ${todaysChord}<br /><br / >` + str;
 
     document.getElementById("overlay").style.display = "flex";
     document.getElementById("emojis").children[0].innerHTML = str;
