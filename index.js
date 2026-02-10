@@ -541,7 +541,14 @@ function copyScore()
 
         // Copy the text inside the text field
     navigator.clipboard.writeText(CopyText);
-    
+
+    const shareBtn = document.querySelector('#container .share');
+    const originalText = shareBtn.textContent;
+    shareBtn.textContent = "Score Copied!";
+    setTimeout(() => {
+        shareBtn.textContent = originalText;
+    }, 2000);
+
     Toastify({
         text: "Score Copied!",
         offset: {
