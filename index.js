@@ -122,6 +122,21 @@ function findEnharmonicNotes(note, enharmonicArray) {
     }
     return null; // Return null if the note is not found
 }
+
+// Resolve a note name (e.g., "Cb4") to the piano key element that exists
+// Tries exact match first, then any enharmonic equivalent that has a key in the DOM
+function getKeyElementForNote(note) {
+        let key = document.querySelector(`.key[data-note='${note}']`);
+        if (key) return key;
+        const enNotes = findEnharmonicNotes(note, enharmonics);
+        if (enNotes) {
+                for (let alt of enNotes) {
+                        key = document.querySelector(`.key[data-note='${alt}']`);
+                        if (key) return key;
+                }
+        }
+        return null;
+}
   
 
 var today = new Date();
@@ -255,24 +270,24 @@ function playChord(row)
         row--;
         const now = Tone.now();
         
-        // Highlight notes sequentially as they play
+        // Highlight notes sequentially as they play. Use the visible key element
         for (let i = 0; i < maxCount; i++) {
             const note = state.grid[row][i];
-            const key = document.querySelector(`.key[data-note='${note}']`);
-            
+            const keyEl = getKeyElementForNote(note);
+
             timeSkew = i * (1/maxCount); // s
             timeSkewMs = timeSkew * 1000; // ms
-            
+
             // Add highlight when note plays
             setTimeout(() => {
-                if (key) key.classList.add('play');
+                if (keyEl) keyEl.classList.add('play');
             }, timeSkewMs);
-            
+
             setTimeout(function() {
                 keys.forEach(key => {
                     key.classList.remove('active');
                     key.classList.remove('play');
-                    
+
                 })
             }, 2 * 1000);
             chordPiano.triggerAttack(state.grid[row][i], now + timeSkew);
