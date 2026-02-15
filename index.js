@@ -139,6 +139,20 @@ function getKeyElementForNote(note) {
 }
   
 
+// Daily localStorage reset — clears storage once per calendar day
+(function dailyLocalStorageReset() {
+    try {
+        const lastReset = localStorage.getItem('chordle_last_reset');
+        const todayDate = new Date().toISOString().slice(0,10); // YYYY-MM-DD
+        if (lastReset !== todayDate) {
+            localStorage.clear();
+            localStorage.setItem('chordle_last_reset', todayDate);
+        }
+    } catch (e) {
+        console.warn('Daily localStorage reset failed:', e);
+    }
+})();
+
 var today = new Date();
 var dd = String(today.getDate()).padStart(2, '0');
 var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
