@@ -278,6 +278,15 @@ function playChord(row)
     if (row == 0)
     {
         chordPiano.triggerAttackRelease(tempAnswerPlayer, "8n");
+        // Ensure any active/play classes are cleared after playback
+        setTimeout(function() {
+            keys.forEach(key => {
+                key.classList.remove('active');
+                key.classList.remove('play');
+
+            })
+            activeCount = 0;
+        }, 2 * 1000);
     }
     else
     {
@@ -297,15 +306,17 @@ function playChord(row)
                 if (keyEl) keyEl.classList.add('play');
             }, timeSkewMs);
 
-            setTimeout(function() {
-                keys.forEach(key => {
-                    key.classList.remove('active');
-                    key.classList.remove('play');
-
-                })
-            }, 2 * 1000);
             chordPiano.triggerAttack(state.grid[row][i], now + timeSkew);
         }
+        // Remove highlight/active classes once playback finishes and reset counter
+        setTimeout(function() {
+            keys.forEach(key => {
+                key.classList.remove('active');
+                key.classList.remove('play');
+            });
+            activeCount = 0;
+        }, 2 * 1000);
+
         chordPiano.triggerRelease(state.grid[row], now + 2);
     }
 }
