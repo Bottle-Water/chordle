@@ -281,7 +281,6 @@ function playChord(row)
         // Ensure any active/play classes are cleared after playback
         setTimeout(function() {
             keys.forEach(key => {
-                key.classList.remove('active');
                 key.classList.remove('play');
 
             })
@@ -311,7 +310,6 @@ function playChord(row)
         // Remove highlight/active classes once playback finishes and reset counter
         setTimeout(function() {
             keys.forEach(key => {
-                key.classList.remove('active');
                 key.classList.remove('play');
             });
             activeCount = 0;
