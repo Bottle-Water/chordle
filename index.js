@@ -311,6 +311,7 @@ function playChord(row)
         setTimeout(function() {
             keys.forEach(key => {
                 key.classList.remove('play');
+                key.classList.remove('active');
             });
             activeCount = 0;
         }, 2 * 1000);
