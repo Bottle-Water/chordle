@@ -1,3 +1,7 @@
+if ("audioSession" in navigator) {
+    navigator.audioSession.type = "playback";
+}
+
 const inputSynth = new Tone.Synth().toDestination();
 const chordSynth = new Tone.PolySynth(Tone.Synth, {
 	"volume": 0,
