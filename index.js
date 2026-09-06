@@ -277,8 +277,10 @@ keys.forEach(key => {
 })
 
 
-function playChord(row)
+async function playChord(row)
 {
+    await Tone.start();
+
     if (row == 0)
     {
         chordPiano.triggerAttackRelease(tempAnswerPlayer, "8n");
@@ -324,7 +326,9 @@ function playChord(row)
     }
 }
 
-function playNote(key) {
+async function playNote(key) {
+    await Tone.start();
+
     // Toggle active
     if (key.classList.contains('active'))
     {
@@ -347,8 +351,10 @@ function playNote(key) {
 
 
 
-function submitGuess()
+async function submitGuess()
 {
+    await Tone.start();
+
     state.currentCol = 0;
     const keys = document.querySelectorAll('.active');
     if (keys.length < maxCount)
