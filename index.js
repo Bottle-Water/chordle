@@ -184,6 +184,7 @@ const game = document.getElementById('game');
 let selectedKeys = []
 let activeCount = 0;
 let rightCount = 0;
+let isSubmitting = false;
 let str = "";
 let copyStr = "";
 let tempAnswerPlayer = ["D3","Gb3", "A3", "D4"];
@@ -361,7 +362,17 @@ async function playNote(key) {
 
 async function submitGuess()
 {
-    await prepareAudio();
+    if (isSubmitting || state.gameOver) {
+        return;
+    }
+
+    isSubmitting = true;
+    try {
+        await prepareAudio();
+    } catch (error) {
+        isSubmitting = false;
+        return;
+    }
 
     state.currentCol = 0;
     const keys = document.querySelectorAll('.active');
@@ -369,11 +380,7 @@ async function submitGuess()
     {
         inputPiano.triggerAttackRelease("C1", "32n");
         document.querySelector('.hint').classList.add('shown');
-        return;
-    }
-
-    if (state.gameOver)
-    {
+        isSubmitting = false;
         return;
     }
 
@@ -429,6 +436,7 @@ async function submitGuess()
         })
         state.currentRow++;
             saveState(); // Save after guess
+        isSubmitting = false;
     }, 2 * 1000);
 
     activeCount = 0;
