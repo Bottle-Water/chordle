@@ -29,6 +29,8 @@ const chordSynth = new Tone.PolySynth(Tone.Synth, {
 	}
 }).toDestination();
 
+const chordLimiter = new Tone.Limiter(-3).toDestination();
+
 const chordPiano = new Tone.Sampler({
     urls: {
         A0: "A0.mp3",
@@ -63,8 +65,9 @@ const chordPiano = new Tone.Sampler({
         C8: "C8.mp3"
     },
     release: 1,
+    volume: -8,
     baseUrl: "https://tonejs.github.io/audio/salamander/"
-}).toDestination();
+}).connect(chordLimiter);
 
 const inputPiano = chordPiano;
 
