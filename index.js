@@ -1,5 +1,10 @@
-if ("audioSession" in navigator) {
-    navigator.audioSession.type = "playback";
+async function prepareAudio() {
+    if ("audioSession" in navigator) {
+        navigator.audioSession.type = "playback";
+    }
+
+    await Tone.start();
+    await Tone.loaded();
 }
 
 const inputSynth = new Tone.Synth().toDestination();
@@ -279,7 +284,7 @@ keys.forEach(key => {
 
 async function playChord(row)
 {
-    await Tone.start();
+    await prepareAudio();
 
     if (row == 0)
     {
@@ -327,7 +332,7 @@ async function playChord(row)
 }
 
 async function playNote(key) {
-    await Tone.start();
+    await prepareAudio();
 
     // Toggle active
     if (key.classList.contains('active'))
@@ -353,7 +358,7 @@ async function playNote(key) {
 
 async function submitGuess()
 {
-    await Tone.start();
+    await prepareAudio();
 
     state.currentCol = 0;
     const keys = document.querySelectorAll('.active');
