@@ -182,7 +182,6 @@ function random_item(item) {
 const keys = document.querySelectorAll('.key');
 const game = document.getElementById('game');
 let selectedKeys = []
-let activeCount = 0;
 let rightCount = 0;
 let isSubmitting = false;
 let str = "";
@@ -299,7 +298,6 @@ async function playChord(row)
                 key.classList.remove('play');
 
             })
-            activeCount = 0;
         }, 2 * 1000);
     }
     else
@@ -328,7 +326,6 @@ async function playChord(row)
                 key.classList.remove('play');
                 key.classList.remove('active');
             });
-            activeCount = 0;
         }, 2 * 1000);
 
         chordPiano.triggerRelease(state.grid[row], now + 2);
@@ -336,18 +333,22 @@ async function playChord(row)
 }
 
 async function playNote(key) {
+    // Ignore input while a guess is playing back / game is over
+    if (isSubmitting || state.gameOver) return;
+
     await prepareAudio();
+
+    // Derive the count from the DOM so it can never drift out of sync
+    const activeCount = document.querySelectorAll('.key.active').length;
 
     // Toggle active
     if (key.classList.contains('active'))
     {
         key.classList.remove('active');
-        activeCount--;
     }
-    else if (activeCount < 4)
+    else if (activeCount < maxCount)
     {
         key.classList.add('active');
-        activeCount++;
         pitch = key.dataset.note;
         inputPiano.triggerAttackRelease(pitch, "8n");
     }
@@ -439,7 +440,6 @@ async function submitGuess()
         isSubmitting = false;
     }, 2 * 1000);
 
-    activeCount = 0;
     document.querySelector('.hint').classList.remove('shown');
 
 }
